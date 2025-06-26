@@ -27,7 +27,9 @@
     <script>        
         let scene, camera, renderer, pointsMesh;
         let geometry, positions, colors;
-        let maxPoints = 3000000;
+        let boatBox, boatArrow;
+
+        let maxPoints = 30000000;
         let currentPointCount = 0;
         function initScene() {
             scene = new THREE.Scene();
@@ -54,6 +56,38 @@
             pointsMesh = new THREE.Points(geometry, material);
             scene.add(pointsMesh);
 
+            //BOAT 
+
+            //BOAT BOX 
+            const boxGeometry = new THREE.BoxGeometry(1,3, 1); // ancho, largo, alto
+            const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff, transparent: true, opacity: 0.7 });
+            boatBox = new THREE.Mesh(boxGeometry, boxMaterial);
+            scene.add(boatBox);
+
+            // Triángulo para la "proa" (flecha)
+            const arrowShape = new THREE.Shape();
+            arrowShape.moveTo(0, 1);
+            arrowShape.lineTo(-0.5, -1);
+            arrowShape.lineTo(0.5, -1);
+            arrowShape.lineTo(0, 1);
+
+            const extrudeSettings = { depth: 0.1, bevelEnabled: false };
+            const arrowGeometry = new THREE.ExtrudeGeometry(arrowShape, extrudeSettings);
+            const arrowMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.9 });
+            boatArrow = new THREE.Mesh(arrowGeometry, arrowMaterial);
+
+            // Posicionar el triángulo encima de la caja, en la parte delantera (largo = y)
+            boatArrow.position.set(0, 2.6, 0.6); // un poco más adelante y arriba
+            boatBox.add(boatArrow); // Lo hacemos hijo de la caja para que se mueva con ella
+
+
+
+
+
+
+
+
+
             animate();
         }
 
@@ -65,30 +99,22 @@
         function clamp(val, min, max) {
             return Math.max(min, Math.min(max, val));
         }
-        // Esta función la llama Arma 3
+        function updateBoat(position, direction) {
+            boatBox.position.set(...position);
+
+            const dirVec = new THREE.Vector3(...direction).normalize();
+            const up = new THREE.Vector3(0, 0, 1);
+
+            const target = boatBox.position.clone().add(dirVec);
+            boatBox.lookAt(target);
+            boatBox.up.copy(up);
+        }
+
+
         function updateLidar(pos, lookAt, newPoints) {
-            
-            
-            
-            //const lookVector = new THREE.Vector3(...dir).normalize().multiplyScalar(10);
-            //const lookAt = new THREE.Vector3(...pos).add(lookVector);
-            /*
-            const lookAtVec = new THREE.Vector3(...lookAt);
-            const posVec = new THREE.Vector3(...pos);
-
-            const distance = posVec.distanceTo(lookAtVec);
-            console.log("Distancia cámara/lookAt:", distance);
-        
-
-            // Actualizar cámara
-            camera.position.set(...pos);
-            camera.up.set(0, 0, 1); // Mantiene orientación vertical
-            camera.lookAt(lookAtVec);
-            */
-
             const cameraPos = new THREE.Vector3(...pos);
             const target = new THREE.Vector3(...lookAt);
-
+            console.log(currentPointCount)
             const direction = new THREE.Vector3().subVectors(target, cameraPos);
 
             if (direction.length() < 0.1) {
@@ -102,16 +128,11 @@
             camera.lookAt(target);
 
             // Debug
-            console.log("Camera dir:", direction);
-            console.log("Quaternion:", camera.quaternion);
+            //console.log("Camera dir:", direction);
+            //console.log("Quaternion:", camera.quaternion);
 
 
-            
-
-
-            //camera.lookAt(new THREE.Vector3(...lookAt));
-
-            // Agregar nuevos puntos
+            // points
             const posAttr = geometry.getAttribute('position');
             const colorAttr = geometry.getAttribute('color');
 
@@ -127,10 +148,10 @@
 
                 // Gradiente de color: verde (0m) → rojo (>=50m)
                 
-                const t = clamp( (-z) /50, 0.2, 1); // 0: cerca, 1: lejos
+                const t = clamp( (-z) /50, 0, 1); // 0: cerca, 1: lejos
                 const r = t;
                 const g = 1 - t;
-                const b = 0;
+                const b = 1 - t;
 
                 colors[index] = r;
                 colors[index + 1] = g;
@@ -141,7 +162,7 @@
 
             posAttr.needsUpdate = true;
             colorAttr.needsUpdate = true;
-            geometry.setDrawRange(0, currentPointCount); // ← Esto también puede ser clave
+            geometry.setDrawRange(0, currentPointCount);
 
         }
         initScene();

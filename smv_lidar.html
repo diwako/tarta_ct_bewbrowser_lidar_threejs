@@ -33,21 +33,14 @@
 
         function initScene() {
             scene = new THREE.Scene();
-            const fovRadians = 0.75;
-            const fovDegrees = THREE.MathUtils.radToDeg(fovRadians); // ≈ 42.97
-
-            //camera = new THREE.PerspectiveCamera(fovDegrees, window.innerWidth / window.innerHeight, 0.01, 10000);
-            
-            camera = new THREE.PerspectiveCamera(48.3438, window.innerWidth / window.innerHeight, 0.01, 10000);
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 10000);
             camera.position.set(0, 0, 0);
-            
 
             renderer = new THREE.WebGLRenderer({ alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
             geometry = new THREE.BufferGeometry();
-            geometry.setDrawRange(0, currentPointCount); // ya lo estás haciendo, perfecto
             let totalFloats = Number(maxPoints) * 3;
             if (isNaN(totalFloats) || totalFloats <= 0) {
                 console.error("maxPoints no válido:", maxPoints);
@@ -59,10 +52,8 @@
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-
             const material = new THREE.PointsMaterial({ size: 0.02, vertexColors: true });
             pointsMesh = new THREE.Points(geometry, material);
-            pointsMesh.frustumCulled = false;
             scene.add(pointsMesh);
 
             animate();
@@ -77,21 +68,15 @@
             return Math.max(min, Math.min(max, val));
         }
         // Esta función la llama Arma 3
-        function updateLidar(pos, dir, newPoints) {
+        function updateLidar(pos, lookAt, newPoints) {
             
 
-              // Actualizar posición de la cámara
-            const cameraPos = new THREE.Vector3(...pos);
-            const direction = new THREE.Vector3(...dir).normalize();
-
-            // Calcular lookAt como un punto en la dirección de visión
-            const lookAt = cameraPos.clone().add(direction.clone().multiplyScalar(10));
-
-            camera.position.copy(cameraPos);
-            camera.up.set(0, 0, 1); // Z como "arriba"
-            camera.lookAt(lookAt);
-
-
+            const lookAtVec = new THREE.Vector3(...lookAt);
+            // Actualizar cámara
+            camera.position.set(...pos);
+            camera.up.set(0, 0, 1); // Mantiene orientación vertical
+            camera.lookAt(lookAtVec);
+            
             // Agregar nuevos puntos
             const posAttr = geometry.getAttribute('position');
             const colorAttr = geometry.getAttribute('color');

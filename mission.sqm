@@ -8,7 +8,7 @@ class EditorData
 	toggles=1;
 	class ItemIDProvider
 	{
-		nextID=12;
+		nextID=18;
 	};
 	class MarkerIDProvider
 	{
@@ -16,23 +16,23 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={2635.4055,3.5372229,5955.9209};
-		dir[]={-0.96973789,-0.22859696,0.08574421};
-		up[]={-0.22770859,0.97352111,0.020133989};
-		aside[]={0.088076368,1.8626451e-09,0.99611384};
+		pos[]={2172.4226,45.563347,5797.2759};
+		dir[]={-0.2160753,-0.51161408,-0.83160639};
+		up[]={-0.12866037,0.85921353,-0.49517295};
+		aside[]={-0.96786475,3.3993274e-08,0.25147891};
 	};
 };
 binarizationWanted=0;
-sourceName="HTMLTEST";
+sourceName="htmltest";
 addons[]=
 {
 	"A3_Ui_F",
 	"A3_Structures_F_Heli_Furniture",
 	"A3_Props_F_Enoch_Military_Equipment",
 	"A3_Structures_F_Civ_InfoBoards",
+	"A3_Boat_F_Gamma_Boat_Civil_01",
 	"A3_Characters_F",
-	"A3_Characters_F_Exp_Civil",
-	"A3_Boat_F_Gamma_Boat_Civil_01"
+	"A3_Boat_F_Beta_SDV_01"
 };
 class AddonsMetaData
 {
@@ -69,22 +69,22 @@ class AddonsMetaData
 		};
 		class Item4
 		{
-			className="A3_Characters_F";
-			name="Arma 3 Alpha - Characters and Clothing";
+			className="A3_Boat_F_Gamma";
+			name="Arma 3 - Boats and Submersibles";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
 		class Item5
 		{
-			className="A3_Characters_F_Exp";
-			name="Arma 3 Apex - Characters and Clothing";
+			className="A3_Characters_F";
+			name="Arma 3 Alpha - Characters and Clothing";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
 		class Item6
 		{
-			className="A3_Boat_F_Gamma";
-			name="Arma 3 - Boats and Submersibles";
+			className="A3_Boat_F_Beta";
+			name="Arma 3 Beta - Boats and Submersibles";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
@@ -115,14 +115,14 @@ class Mission
 		year=2035;
 		month=7;
 		day=6;
-		hour=5;
-		minute=-5;
+		hour=4;
+		minute=18;
 		startFogDecay=0.014;
 		forecastFogDecay=0.014;
 	};
 	class Entities
 	{
-		items=6;
+		items=8;
 		class Item0
 		{
 			dataType="Marker";
@@ -183,28 +183,59 @@ class Mission
 		};
 		class Item4
 		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={2621.0708,1.2970123,5956.417};
+				angles[]={0,5.6399012,0};
+			};
+			side="Empty";
+			class Attributes
+			{
+			};
+			id=10;
+			type="C_Boat_Civil_01_police_F";
+			atlOffset=14.72818;
+		};
+		class Item5
+		{
 			dataType="Group";
-			side="Civilian";
+			side="West";
 			class Entities
 			{
-				items=1;
+				items=2;
 				class Item0
 				{
 					dataType="Object";
 					class PositionInfo
 					{
-						position[]={2621.0708,0.0014350414,5956.4668};
-						angles[]={0,5.6399012,0};
+						position[]={2546.6221,0.0014388561,6028.6973};
+						angles[]={0,2.0543773,0};
 					};
-					side="Civilian";
+					side="West";
 					flags=2;
 					class Attributes
 					{
-						isPlayer=1;
 					};
-					id=11;
-					type="C_man_1";
-					atlOffset=14.72818;
+					id=14;
+					type="B_diver_F";
+					atlOffset=18.961086;
+				};
+				class Item1
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={2546.6221,1.876047,6028.6973};
+						angles[]={0,2.0543773,0};
+					};
+					side="West";
+					class Attributes
+					{
+					};
+					id=15;
+					type="B_diver_F";
+					atlOffset=20.835695;
 				};
 			};
 			class Attributes
@@ -214,42 +245,112 @@ class Mission
 			{
 				class LinkIDProvider
 				{
-					nextID=1;
+					nextID=2;
 				};
 				class Links
 				{
-					items=1;
+					items=2;
 					class Item0
 					{
 						linkID=0;
-						item0=11;
-						item1=10;
+						item0=14;
+						item1=13;
 						class CustomData
 						{
 							role=1;
 						};
 					};
+					class Item1
+					{
+						linkID=1;
+						item0=15;
+						item1=13;
+						class CustomData
+						{
+							role=2;
+							turretPath[]={0};
+						};
+					};
 				};
 			};
-			id=9;
-			atlOffset=14.72818;
+			id=12;
+			atlOffset=16.912014;
 		};
-		class Item5
+		class Item6
 		{
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={2621.0708,1.2970123,5956.417};
-				angles[]={0,5.6399012,0};
+				position[]={2546.6221,-0.17446411,6028.6475};
+				angles[]={0,2.0543773,0};
 			};
-			side="Civilian";
+			side="West";
 			flags=2;
 			class Attributes
 			{
 			};
-			id=10;
-			type="C_Boat_Civil_01_police_F";
-			atlOffset=14.72818;
+			id=13;
+			type="B_SDV_01_F";
+			atlOffset=16.912014;
+		};
+		class Item7
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={2167.7939,5.9410944,5760.1357};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+						isPlayer=1;
+					};
+					id=17;
+					type="B_Soldier_GL_F";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="speaker";
+							expression="_this setspeaker _value;";
+							class Value
+							{
+								class data
+								{
+									singleType="STRING";
+									value="Male05ENG";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="pitch";
+							expression="_this setpitch _value;";
+							class Value
+							{
+								class data
+								{
+									singleType="SCALAR";
+									value=0.98000002;
+								};
+							};
+						};
+						nAttributes=2;
+					};
+				};
+			};
+			class Attributes
+			{
+			};
+			id=16;
 		};
 	};
 };
